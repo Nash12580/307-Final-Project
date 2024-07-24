@@ -1,3 +1,4 @@
+
 package org.example;
 
 import com.github.javaparser.JavaParser;
@@ -13,13 +14,13 @@ import java.util.List;
 import java.io.FileInputStream;
 
 public class CodeParser{
-    public static void parseJavaFile(String filePath){
+    public static void parseJavaFile(String filePath) throws IOException{
         try(FileInputStream in = new FileInputStream(filePath)){
             JavaParser parser = new JavaParser();
             CompilationUnit cu = parser.parse(in).getResult().orElse(null);
 
             if (cu != null){
-                cu.findAll(ClassOrInterfaceDeclaration.class).forEach(cls ->{
+                for (ClassOrInterfaceDeclaration cls : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                     System.out.println("Class: " + cls.getNameAsString());
 
                     List<MethodDeclaration> methods = cls.getMethods();
@@ -28,7 +29,8 @@ public class CodeParser{
                     List<FieldDeclaration> attributes = cls.getFields();
                     attributes.forEach(attribute -> System.out.println(" Attributes: " + attribute.getVariables()));
 
-                });
+                    CodeMetrics.printMetrics(filePath);
+                }
             }else{
                 System.out.println("No CompilationUnit found.");
             }
@@ -37,7 +39,7 @@ public class CodeParser{
         }
     }
 
-    public static void parseJavaDirectory(String dirPath){
+    public static void parseJavaDirectory(String dirPath) throws IOException {
         File dir = new File(dirPath);
         if (dir.isDirectory()){
             File[] files = dir.listFiles(file -> file.isFile() && file.getName().endsWith(".java"));

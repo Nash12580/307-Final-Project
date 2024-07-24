@@ -1,14 +1,10 @@
 package org.example;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class CodeMetrics {
     public static int countTotalLines(String filePath) throws IOException{
@@ -27,7 +23,7 @@ public class CodeMetrics {
             boolean insideClass = false;
             while((line = reader.readLine()) != null){
                 line = line.trim();
-                if(line.startsWith("class ") || line.startsWith("public class ") || line.startsWith("private class ")){
+                if(line.startsWith("class ") || line.startsWith("public class ") || line.startsWith("private class ") || line.startsWith("public interface ")){
                     insideClass = true;
                 }
                 if(insideClass){
@@ -38,11 +34,33 @@ public class CodeMetrics {
         }
     }
 
-    public static int calculateELOC(String filePath) throws IOException{
-
+    public static int counteLOC(String filePath) throws IOException{
+        CompilationUnit cu = parseFile(filePath);
+        if(cu == null) return 0;
+        Visitor visitor = new Visitor();
+        visitor.visit(cu, null);
+        return visitor.geteLOC();
     }
 
-    public static int calculateLLOC(String filePath) throws IOException{
+    public static int countlLOC(String filePath) throws IOException{
+        CompilationUnit cu = parseFile(filePath);
+        if(cu == null) return 0;
+        Visitor visitor = new Visitor();
+        visitor.visit(cu, null);
+        return visitor.getLLOC();
+    }
 
+    private static  CompilationUnit parseFile(String filePath) throws IOException{
+        try(FileInputStream in = new FileInputStream(filePath)){
+            JavaParser parser = new JavaParser();
+            return parser.parse(in).getResult().orElse(null);
+        }
+    }
+
+    public static void printMetrics(String filePath) throws IOException{
+        System.out.println("Total Lines: " + countTotalLines(filePath));
+        System.out.println("LOC: " + countLOC(filePath));
+        System.out.println("eLOC: " + counteLOC(filePath));
+        System.out.println("lLOC: " + countlLOC(filePath));
     }
 }

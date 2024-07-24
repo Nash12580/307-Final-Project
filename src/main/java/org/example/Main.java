@@ -1,12 +1,13 @@
 package org.example;
 import javax.swing.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends JFrame {
     private List<Planet> planets = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String testFilepath = "C:\\Users\\Nasha\\JavaProjects\\CSC 307\\PaintApp";
         CodeParser.parseJavaDirectory(testFilepath);
         Main universe = new Main();
