@@ -33,4 +33,9 @@ class UniversePanel extends JPanel {
             stars.add(new Star());
         }
     }
+
+    @Override
+    public Dimension getPreferredSize(){
+        return new Dimension(1400, 1000);
+    }
 }

@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -14,6 +15,13 @@ import java.util.List;
 import java.io.FileInputStream;
 
 public class CodeParser{
+    private static int panelWidth;
+    private static int panelHeight;
+
+    public static void initialize(int width, int height) {
+        panelWidth = width;
+        panelHeight = height;
+    }
     public static void parseJavaFile(String filePath) throws IOException{
         try(FileInputStream in = new FileInputStream(filePath)){
             JavaParser parser = new JavaParser();
@@ -21,15 +29,17 @@ public class CodeParser{
 
             if (cu != null){
                 for (ClassOrInterfaceDeclaration cls : cu.findAll(ClassOrInterfaceDeclaration.class)) {
-                    System.out.println("Class: " + cls.getNameAsString());
+                    String className = cls.getNameAsString();
+                    List<String> methods = cls.getMethods().stream().map(m -> m.getNameAsString()).toList();
+                    List<String> attributes = cls.getFields().stream().map(f -> f.getVariables().toString()).toList();
 
-                    List<MethodDeclaration> methods = cls.getMethods();
-                    methods.forEach(method -> System.out.println(" Method: " + method.getNameAsString()));
+                    int radius = 20 + methods.size() + attributes.size();
+                    int x = (int) (radius + (Math.random()*(panelWidth - 15 * radius)));
+                    int y = (int) (radius + (Math.random()*(panelHeight - 15 * radius)));
+                    Color[] colors = Officer.generateColors(filePath);
 
-                    List<FieldDeclaration> attributes = cls.getFields();
-                    attributes.forEach(attribute -> System.out.println(" Attributes: " + attribute.getVariables()));
-
-                    CodeMetrics.printMetrics(filePath);
+                    Planet planet = new Planet(className, radius, x, y, colors[0], colors[1]);
+                    Officer.getPlanetStack().push(planet);
                 }
             }else{
                 System.out.println("No CompilationUnit found.");
