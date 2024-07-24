@@ -1,11 +1,9 @@
 package org.example;
+
 import javax.swing.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main extends JFrame {
-    private List<Planet> planets = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
         String testFilepath = "C:\\Users\\Nasha\\JavaProjects\\CSC 307\\PaintApp";
@@ -18,7 +16,11 @@ public class Main extends JFrame {
     }
 
     public Main() {
-        UniversePanel panel = new UniversePanel(planets);
-        add(panel);
+        UniversePanel universePanel = new UniversePanel();
+        MouseNanny mouseNanny = new MouseNanny();
+        universePanel.addMouseListener(mouseNanny);
+        universePanel.addMouseMotionListener(mouseNanny);
+        add(universePanel);
+        Officer.setUniversePanel(universePanel);
     }
 }

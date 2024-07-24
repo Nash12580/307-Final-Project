@@ -6,12 +6,10 @@ import java.util.List;
 import java.util.ArrayList;
 
 class UniversePanel extends JPanel {
-    private List<Planet> planets;
     private List<Star> stars = new ArrayList<>();
     private static final int NUM_STARS = 300;
 
-    public UniversePanel (List<Planet> planetsIn) {
-        planets = planetsIn;
+    public UniversePanel () {
         createStars();
     }
 
@@ -22,7 +20,7 @@ class UniversePanel extends JPanel {
         g.fillRect(0, 0, getWidth(), getHeight());
 
         Graphics2D g2d = (Graphics2D) g;
-        for (Planet planet : planets) {
+        for (Planet planet : Officer.getPlanetStack()) {
             planet.draw(g2d);
         }
         for (Star star : stars) {
