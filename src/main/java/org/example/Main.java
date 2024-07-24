@@ -21,6 +21,9 @@ public class Main extends JFrame {
     }
 
     public Main() {
+        // Setup the menu bar using FileMenu class
+        setJMenuBar(new FileMenu());
+
         UniversePanel universePanel = new UniversePanel();
         MouseNanny mouseNanny = new MouseNanny();
         universePanel.addMouseListener(mouseNanny);
