@@ -2,6 +2,7 @@ package org.example;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.List;
 
 /**@author Nashali Vicente Lopez**/
@@ -10,10 +11,22 @@ public class ZoomPanel extends JPanel {
     public static final int ZOOM_EFFECT = 5;
     private static final int NUM_STARS = 10000;
     private List<Star> stars;
+    private List<Meteorite> meteorites = new ArrayList<>();
+    private static final int METEORITE_SIZE = 10;
+    private static final double METEORITE_DISTANCE = 300;
+    private static final double METEORITE_SPEED = 0.5;
+
+
     public ZoomPanel(Planet planet){
         this.planet = planet;
         setPreferredSize(new Dimension(800, 600));
         setLayout(new BorderLayout());
+        int numMethods = planet.getMethods().size();
+        for (int i = 0; i < numMethods; i++) {
+            double angle = (360.0 / numMethods) * i;
+            meteorites.add(new Meteorite(getWidth() / 2, getHeight() / 2, METEORITE_SIZE, METEORITE_DISTANCE, angle));
+        }
+
         MetricsPanel metricsPanel = new MetricsPanel();
         add(metricsPanel, BorderLayout.WEST);
         JButton backButton =  new JButton("Back");
@@ -45,6 +58,10 @@ public class ZoomPanel extends JPanel {
             star.draw(g2d);
         }
         drawZoomedPlanet(g);
+        for (Meteorite meteorite : meteorites) {
+            meteorite.updatePosition(getWidth() / 2, getHeight() / 2, METEORITE_SPEED);
+            meteorite.draw(g2d);
+        }
     }
     private void drawZoomedPlanet(Graphics g){
         int centerX = getWidth() / 2;
