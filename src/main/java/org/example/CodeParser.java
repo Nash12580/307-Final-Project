@@ -1,17 +1,14 @@
-
 package org.example;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 import java.io.FileInputStream;
 
+/**@author Nashali Vicente Lopez**/
 public class CodeParser{
     private static int panelWidth;
     private static int panelHeight;
@@ -30,15 +27,15 @@ public class CodeParser{
                 for (ClassOrInterfaceDeclaration cls : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                     String className = cls.getNameAsString();
                     List<String> methods = cls.getMethods().stream().map(m -> m.getNameAsString()).toList();
-                    List<String> attributes = cls.getFields().stream().map(f -> f.getVariables().toString()).toList();
+                    List<String> fields = cls.getFields().stream().map(f -> f.getVariables().toString()).toList();
 
-                    int radius = 20 + methods.size() + attributes.size();
+                    int radius = 20 + methods.size() + fields.size();
                     int x = (int) (radius + (Math.random()*(panelWidth - 15 * radius)));
                     int y = (int) (radius + (Math.random()*(panelHeight - 15 * radius)));
                     Color[] colors = Officer.generateColors(className);
                     double maxRadius = Math.min(panelWidth / 2, panelHeight / 2) - 10;
                     double distanceToSun = 100 + Math.random() * (maxRadius - 100);
-                    Planet planet = new Planet(className, radius, distanceToSun, x, y, colors[0], colors[1]);
+                    Planet planet = new Planet(className, radius, distanceToSun, x, y, colors[0], colors[1], filePath, fields, methods);
                     Officer.getPlanetStack().push(planet);
                 }
             } else {

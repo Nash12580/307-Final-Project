@@ -1,6 +1,7 @@
 package org.example;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.Stack;
 
 /** @author Grant Robinson **/
@@ -46,5 +47,15 @@ public class Officer {
 
     public static int getScreenHeight() {
         return screenHeight;
+    }
+
+    public static String getMetrics(String filepath) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        sb.append("File: ").append(filepath).append("\n");
+        sb.append("Total Lines: ").append(CodeMetrics.countTotalLines(filepath)).append("\n");
+        sb.append("LOC: ").append(CodeMetrics.countLOC(filepath)).append("\n");
+        sb.append("eLOC: ").append(CodeMetrics.counteLOC(filepath)).append("\n");
+        sb.append("lLOC: ").append(CodeMetrics.countlLOC(filepath)).append("\n");
+        return sb.toString();
     }
 }

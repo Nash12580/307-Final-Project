@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+/**@author Nashali Vicente Lopez**/
 
 public class CodeMetrics {
     public static int countTotalLines(String filePath) throws IOException{

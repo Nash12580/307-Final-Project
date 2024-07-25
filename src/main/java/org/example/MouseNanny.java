@@ -1,6 +1,10 @@
 package org.example;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.util.List;
 import java.util.Stack;
 
 /** @author Nashali Vicente Lopez **/
@@ -36,6 +40,8 @@ public class MouseNanny implements MouseListener, MouseMotionListener {
                     }
                 }
                 selectedPlanet.setSelected(!selectedPlanet.isSelected());
+                showClassMetrics(selectedPlanet);
+                switchToZoomPanel(selectedPlanet, e);
                 Officer.tellYourBoss();
             }
         }
@@ -49,4 +55,50 @@ public class MouseNanny implements MouseListener, MouseMotionListener {
     public void mouseExited(MouseEvent e) {}
     public void mouseMoved(MouseEvent e) {}
     public void mouseDragged(MouseEvent e) {}
+
+    private void showClassMetrics(Planet planet){
+        try{
+            String metrics = Officer.getMetrics(planet.getFilepath());
+            StringBuilder sb = new StringBuilder(metrics);
+
+            sb.append("\nFields:\n");
+            List<String> fields = planet.getFields();
+            if(fields != null){
+                for(String field: fields){
+                    sb.append(field).append("\n");
+                }
+            }else{
+                sb.append("No fields available\n");
+            }
+
+            sb.append("\nMethods:\n");
+            List<String> methods = planet.getMethods();
+            if(methods != null){
+                for(String method: methods){
+                    sb.append(method).append("\n");
+                }
+            }else{
+                sb.append("No methods available.\n");
+            }
+
+
+            JTextArea textArea = new JTextArea(sb.toString());
+            textArea.setEditable(false);
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            JFrame metricsFrame = new JFrame("Class Metrics");
+            metricsFrame.setSize(400, 300);
+            metricsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            metricsFrame.add(scrollPane);
+            metricsFrame.setVisible(true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void switchToZoomPanel(Planet planet, MouseEvent e){
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor((Component) e.getSource());
+            frame.getContentPane().removeAll();
+            frame.add(new ZoomPanel(planet));
+            frame.revalidate();
+            frame.repaint();
+    }
 }
