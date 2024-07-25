@@ -1,10 +1,11 @@
 package org.example;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
 /**@author Nashali Vicente Lopez**/
 
 public class CodeMetrics {
@@ -58,10 +59,30 @@ public class CodeMetrics {
         }
     }
 
-    public static void printMetrics(String filePath) throws IOException{
-        System.out.println("Total Lines: " + countTotalLines(filePath));
-        System.out.println("LOC: " + countLOC(filePath));
-        System.out.println("eLOC: " + counteLOC(filePath));
-        System.out.println("lLOC: " + countlLOC(filePath));
+    private static List<String> listJavaFiles(String directoryPath){
+        List<String> javaFiles = new ArrayList<>();
+        File directory = new File(directoryPath);
+        if(directory.isDirectory()){
+            for(File file: directory.listFiles()){
+                if (file.isFile() && file.getName().endsWith(".java")){
+                    javaFiles.add(file.getAbsolutePath());
+                }else if(file.isDirectory()){
+                    javaFiles.addAll(listJavaFiles(file.getAbsolutePath()));
+                }
+            }
+        }
+        return javaFiles;
+    }
+    public static double calculateAbsractness(String filePath) throws IOException{
+        CompilationUnit cu = parseFile(filePath);
+        if(cu == null) return 0.0;
+        Visitor visitor = new Visitor();
+        visitor.visit(cu, null);
+        int totalCandI = visitor.getTotalCI();
+        int abstractCandI = visitor.getAbstractCI();
+
+        if(totalCandI == 0) return 0.0;
+        return (double) abstractCandI/totalCandI;
     }
 }
+

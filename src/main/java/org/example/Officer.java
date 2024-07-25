@@ -56,6 +56,7 @@ public class Officer {
         sb.append("LOC: ").append(CodeMetrics.countLOC(filepath)).append("\n");
         sb.append("eLOC: ").append(CodeMetrics.counteLOC(filepath)).append("\n");
         sb.append("lLOC: ").append(CodeMetrics.countlLOC(filepath)).append("\n");
+        sb.append("Abstractness: ").append(CodeMetrics.calculateAbsractness(filepath)).append("\n");
         return sb.toString();
     }
 }

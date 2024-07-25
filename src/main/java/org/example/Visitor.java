@@ -11,6 +11,8 @@ import java.util.Set;
 public class Visitor extends VoidVisitorAdapter<Void> {
     private int eLOC = 0;
     private int lLOC = 0;
+    private int totalCI = 0;
+    private int abstractCI = 0;
     private final Set<String> processedLines = new HashSet<>();
     private final Set<String> processedLogicalStm = new HashSet<>();
 
@@ -38,6 +40,11 @@ public class Visitor extends VoidVisitorAdapter<Void> {
         super.visit(ci, arg);
         processLines(ci.toString());
         ci.getMembers().forEach(member -> member.accept(this, arg));
+
+        totalCI++;
+        if(ci.isAbstract() || ci.isInterface()){
+            abstractCI++;
+        }
     }
 
     @Override
@@ -76,5 +83,13 @@ public class Visitor extends VoidVisitorAdapter<Void> {
 
     public int getLLOC(){
         return lLOC;
+    }
+
+    public int getTotalCI() {
+        return totalCI;
+    }
+
+    public int getAbstractCI() {
+        return abstractCI;
     }
 }

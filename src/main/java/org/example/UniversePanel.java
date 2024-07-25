@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /** @author Grant Robinson **/
 
 class UniversePanel extends JPanel {
-    private List<Star> stars = new ArrayList<>();
+    private List<Star> stars;
     private static final int NUM_STARS = 10000;
     private static final int SUN_SIZE = 100;
     private static final double RAY_LENGTH = 1.4;
@@ -20,7 +20,7 @@ class UniversePanel extends JPanel {
     private int ray_y2;
 
     public UniversePanel () {
-        createStars();
+        setPreferredSize(new Dimension(1400, 1000));
     }
 
     @Override
@@ -29,6 +29,9 @@ class UniversePanel extends JPanel {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
         Graphics2D g2d = (Graphics2D) g;
+        if(stars == null){
+            stars = Star.createStar(NUM_STARS, getWidth(), getHeight());
+        }
         for (Star star : stars) {
             star.draw(g2d);
         }
@@ -37,17 +40,6 @@ class UniversePanel extends JPanel {
             planet.updatePosition(getWidth() / 2, getHeight() / 2, planet.getSpeed());
             planet.draw(g2d);
         }
-    }
-
-    private void createStars() {
-        for (int i = 0; i < NUM_STARS; i++) {
-            stars.add(new Star());
-        }
-    }
-
-    @Override
-    public Dimension getPreferredSize(){
-        return new Dimension(1400, 1000);
     }
 
     private void drawSun(Graphics g) {
