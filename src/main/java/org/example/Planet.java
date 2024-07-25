@@ -2,6 +2,8 @@ package org.example;
 
 import java.awt.*;
 
+/** @author Grant Robinson **/
+
 class Planet {
     private String name;
     private int radius;
@@ -10,15 +12,21 @@ class Planet {
     private Color mainColor;
     private Color secondaryColor;
     private boolean selected;
+    private double distanceToSun;
+    private double angle;
+    private double speed;
 
-    public Planet(String nameIn, int radiusIn, int xIn, int yIn, Color mainColorIn, Color secondaryColorIn) {
+    public Planet(String nameIn, int radiusIn, double distanceToSunIn, int xIn, int yIn, Color mainColorIn, Color secondaryColorIn) {
         name = nameIn;
         radius = radiusIn;
         x = xIn;
         y = yIn;
+        distanceToSun = distanceToSunIn;
         mainColor = mainColorIn;
         secondaryColor = secondaryColorIn;
         selected = false;
+        angle = (Math.random()*(360));
+        speed = Math.random() + .01;
     }
 
     public void draw(Graphics2D g) {
@@ -27,6 +35,19 @@ class Planet {
         g.fillOval(x, y, radius * 2, radius * 2);
         g.setColor(Color.WHITE);
         g.drawString(name, x, y);
+    }
+
+    public void updatePosition(double centerX, double centerY, double speed) {
+        angle += speed;
+        if (angle >= 360) {
+            angle -= 360;
+        }
+        x = (int) (centerX - radius + distanceToSun * Math.cos(Math.toRadians(angle)));
+        y = (int) (centerY - radius + distanceToSun * Math.sin(Math.toRadians(angle)));
+    }
+
+    public double getSpeed() {
+        return speed;
     }
 
     public Color getMainColor() {
@@ -85,4 +106,3 @@ class Planet {
         return selected;
     }
 }
-
