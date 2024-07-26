@@ -2,11 +2,16 @@ package org.example;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.io.FileInputStream;
+import java.util.Map;
 
 /**@author Nashali Vicente Lopez**/
 public class CodeParser{
@@ -26,8 +31,13 @@ public class CodeParser{
             if (cu != null) {
                 for (ClassOrInterfaceDeclaration cls : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                     String className = cls.getNameAsString();
-                    List<String> methods = cls.getMethods().stream().map(m -> m.getNameAsString()).toList();
                     List<String> fields = cls.getFields().stream().map(f -> f.getVariables().toString()).toList();
+                    Map<String, String> methods = new HashMap<>();
+                    for (MethodDeclaration method: cls.getMethods()){
+                        String methodName = method.getNameAsString();
+                        String params = method.getParameters().toString();
+                        methods.put(methodName, params);
+                    }
 
                     int radius = 20 + methods.size() + fields.size();
                     int x = (int) (radius + (Math.random()*(panelWidth - 15 * radius)));

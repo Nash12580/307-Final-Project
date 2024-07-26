@@ -1,15 +1,13 @@
 package org.example;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
-
 /** @author Nashali Vicente Lopez **/
 /** @author Grant Robinson **/
-
 public class MouseNanny implements MouseListener, MouseMotionListener {
     private Planet selectedPlanet = null;
     private Planet getPlanetAt(int x, int y){
@@ -22,12 +20,17 @@ public class MouseNanny implements MouseListener, MouseMotionListener {
         }
         return null;
     }
-
     private boolean planetContains(Planet planet, int x, int y){
         return x >= planet.getX() && x <= planet.getX() + planet.getRadius() * 2 &&
                 y >= planet.getY() && y <= planet.getY() + planet.getRadius() * 2;
     }
-
+    private void switchToZoomPanel(Planet planet, MouseEvent e){
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor((Component) e.getSource());
+        frame.getContentPane().removeAll();
+        frame.add(new ZoomPanel(planet));
+        frame.revalidate();
+        frame.repaint();
+    }
     public void mouseClicked(MouseEvent e) {
         if (e.getClickCount() == 1) {
             selectedPlanet = getPlanetAt(e.getX(), e.getY());
@@ -40,25 +43,32 @@ public class MouseNanny implements MouseListener, MouseMotionListener {
                 }
                 selectedPlanet.setSelected(!selectedPlanet.isSelected());
                 switchToZoomPanel(selectedPlanet, e);
+                showClassMetrics(selectedPlanet);
                 Officer.tellYourBoss();
             }
         }
         if (selectedPlanet == null) { System.out.println("selected: null"); } else {
             System.out.println("selected: " + selectedPlanet.getName()); }
     }
-
+    private void showClassMetrics(Planet planet){
+        try{
+            String metrics = Officer.getMetrics(planet.getFilepath());
+            JTextArea textArea = new JTextArea(metrics);
+            textArea.setEditable(false);
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            JFrame metricsFrame = new JFrame("Class Metrics");
+            metricsFrame.setSize(250, 500);
+            metricsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            metricsFrame.add(scrollPane);
+            metricsFrame.setVisible(true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void mousePressed(MouseEvent e) {}
     public void mouseReleased(MouseEvent e) {}
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
     public void mouseMoved(MouseEvent e) {}
     public void mouseDragged(MouseEvent e) {}
-
-    private void switchToZoomPanel(Planet planet, MouseEvent e){
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor((Component) e.getSource());
-        frame.getContentPane().removeAll();
-        frame.add(new ZoomPanel(planet));
-        frame.revalidate();
-        frame.repaint();
-    }
 }

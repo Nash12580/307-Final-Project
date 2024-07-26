@@ -1,15 +1,15 @@
 package org.example;
-
 import java.awt.*;
 import java.io.IOException;
 import java.util.Stack;
+import java.util.List;
+import java.util.Map;
 
 /** @author Grant Robinson **/
-
+/** @author Nashali Vicente Lopez **/
 public class Officer {
-
     private static UniversePanel universePanel;
-    private static Stack<Planet> planets = new Stack<>();
+    private static final Stack<Planet> planets = new Stack<>();
     private static int screenWidth;
     private static int screenHeight;
 
@@ -57,6 +57,37 @@ public class Officer {
         sb.append("eLOC: ").append(CodeMetrics.counteLOC(filepath)).append("\n");
         sb.append("lLOC: ").append(CodeMetrics.countlLOC(filepath)).append("\n");
         sb.append("Abstractness: ").append(CodeMetrics.calculateAbsractness(filepath)).append("\n");
+        Planet planet = getPlanetByFilepath(filepath);
+        if (planet != null) {
+            sb.append("\n\nFields:\n");
+            sb.append("----------------\n");
+            List<String> fields = planet.getFields();
+            if (fields != null) {
+                for (String field : fields) {
+                    sb.append(field).append("\n");
+                }
+            } else {
+                sb.append("No fields available\n");
+            }
+            sb.append("\nMethods:\n");
+            sb.append("----------------\n");
+            Map<String, String> methods = planet.getMethods();
+            if (methods != null) {
+                for (Map.Entry<String, String> method : methods.entrySet()) {
+                    sb.append(method.getKey()).append("\n");
+                }
+            } else {
+                sb.append("No methods available.\n");
+            }
+        }
         return sb.toString();
+    }
+    private static Planet getPlanetByFilepath(String filepath) {
+        for (Planet planet : planets) {
+            if (planet.getFilepath().equals(filepath)) {
+                return planet;
+            }
+        }
+        return null;
     }
 }

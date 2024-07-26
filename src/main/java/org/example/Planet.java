@@ -1,23 +1,23 @@
 package org.example;
+
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 /** @author Grant Robinson **/
+
 class Planet {
     private String name;
-    private int radius;
-    private int x;
-    private int y;
-    private Color mainColor;
-    private Color secondaryColor;
+    private int radius, x, y;
+    private Color mainColor, secondaryColor;
     private boolean selected;
     private String filepath;
     private List<String> fields;
-    private List<String> methods;
-    private double distanceToSun;
-    private double angle;
-    private double speed;
-    public Planet(String nameIn, int radiusIn, double distanceToSunIn, int xIn, int yIn, Color mainColorIn, Color secondaryColorIn, String filapath, List<String> fields, List<String> methods) {
+    private Map<String, String> methods;
+    private double distanceToSun, angle, speed;
+    public Planet(String nameIn, int radiusIn, double distanceToSunIn, int xIn, int yIn, Color mainColorIn, Color secondaryColorIn, String filapath, List<String> fields, Map<String, String> methods) {
         name = nameIn;
         radius = radiusIn;
         x = xIn;
@@ -28,7 +28,7 @@ class Planet {
         selected = false;
         filepath = filapath;
         this.fields = fields != null ? fields : new ArrayList<>();
-        this.methods = methods != null ? methods : new ArrayList<>();
+        this.methods = methods != null ? methods : new HashMap<>();
         angle = (Math.random()*(360));
         speed = Math.random() + .01;
     }
@@ -80,7 +80,7 @@ class Planet {
     public List<String> getFields() {
         return fields;
     }
-    public List<String> getMethods() {
+    public Map<String, String> getMethods() {
         return methods;
     }
 }

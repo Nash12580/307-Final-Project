@@ -4,14 +4,14 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Map;
 /**@author Nashali Vicente Lopez**/
 public class ZoomPanel extends JPanel {
     private final Planet planet;
     public static final int ZOOM_EFFECT = 5;
     private static final int NUM_STARS = 10000;
     private List<Star> stars;
-    private List<Meteorite> meteorites = new ArrayList<>();
+    private final List<Meteorite> meteorites = new ArrayList<>();
     private static final int METEORITE_SIZE = 10;
     private static final double METEORITE_DISTANCE = 300;
     private static final double METEORITE_SPEED = 0.5;
@@ -19,16 +19,14 @@ public class ZoomPanel extends JPanel {
 
     public ZoomPanel(Planet planet){
         this.planet = planet;
-        setPreferredSize(new Dimension(800, 600));
+        setPreferredSize(new Dimension(900, 600));
         setLayout(new BorderLayout());
         int numMethods = planet.getMethods().size();
-        for (int i = 0; i < numMethods; i++) {
-            double angle = (360.0 / numMethods) * i;
-            meteorites.add(new Meteorite(getWidth() / 2, getHeight() / 2, METEORITE_SIZE, METEORITE_DISTANCE, angle));
+        int i = 0;
+        for (Map.Entry<String, String> method : planet.getMethods().entrySet()) {
+            double angle = (360.0 / numMethods) * i++;
+            meteorites.add(new Meteorite(getWidth() / 2, getHeight() / 2, METEORITE_SIZE, METEORITE_DISTANCE, angle, method.getKey(), method.getValue()));
         }
-
-        MetricsPanel metricsPanel = new MetricsPanel();
-        add(metricsPanel, BorderLayout.WEST);
         JButton backButton =  new JButton("Back");
         backButton.addActionListener(e-> {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(ZoomPanel.this);
@@ -42,7 +40,6 @@ public class ZoomPanel extends JPanel {
             frame.repaint();
         });
         add(backButton, BorderLayout.SOUTH);
-        metricsPanel.updateMetrics(planet);
         addMouseMotionListener(new MouseNanny());
     }
     @Override
