@@ -10,13 +10,13 @@ public class Meteorite {
     private String methodName, methodParams;
     private JWindow hoverWindow;
     private JLabel hoverLabel;
-    public Meteorite(int centerX, int centerY, int size, double distanceFromPlanet, double angle, String methodName, String methodParams) {
+    public Meteorite(int centerX, int centerY, int size, double distanceFromPlanet, double angle, String methodName, String methodParams, Color color) {
         this.x = (int) (centerX + distanceFromPlanet * Math.cos(Math.toRadians(angle)));
         this.y = (int) (centerY + distanceFromPlanet * Math.sin(Math.toRadians(angle)));
         this.angle = angle;
         this.size = size;
         this.distanceFromPlanet = distanceFromPlanet;
-        this.color = Color.GREEN;
+        this.color = color;
         this.methodName = methodName;
         this.methodParams = methodParams;
 
@@ -60,5 +60,4 @@ public class Meteorite {
     public String getMethodParams() {
         return methodParams;
     }
-
 }

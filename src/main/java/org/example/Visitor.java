@@ -17,6 +17,7 @@ public class Visitor extends VoidVisitorAdapter<Void> {
     @Override
     public void visit(MethodDeclaration md, Void arg){
         super.visit(md, arg);
+        declaredMethods.add(md.getNameAsString());
         if(md.getBody().isEmpty() && processedLogicalStm.add(md.toString().trim())){
             lLOC++;
         }else if(md.getBody().isPresent()){

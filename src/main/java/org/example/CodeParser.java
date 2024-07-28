@@ -3,22 +3,17 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.io.FileInputStream;
-import java.util.Map;
+import java.util.List;
 
 /**@author Nashali Vicente Lopez**/
 public class CodeParser{
     private static int panelWidth;
     private static int panelHeight;
-    private static final Map<String, Map<String, String>> classMethods = new HashMap<>();
-    private static final Map<String, Map<String, Boolean>> classMethodUsage = new HashMap<>();
     public static void initialize(int width, int height) {
         panelWidth = width;
         panelHeight = height;
@@ -31,6 +26,11 @@ public class CodeParser{
             if (cu != null) {
                 Visitor visitor = new Visitor();
                 cu.accept(visitor, null);
+                Set<String> declaredMethods = visitor.getDeclaredMethods();
+                Set<String> usedMethods = visitor.getUsedMethods();
+                Set<String> unusedMethods = new HashSet<>(declaredMethods);
+                unusedMethods.removeAll(usedMethods);
+
                 for (ClassOrInterfaceDeclaration cls : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                     String className = cls.getNameAsString();
                     List<String> fields = cls.getFields().stream().map(f -> f.getVariables().toString()).toList();
@@ -40,12 +40,6 @@ public class CodeParser{
                         String params = method.getParameters().toString();
                         methods.put(methodName, params);
                     }
-                    classMethods.put(className, methods);
-                    Map<String, Boolean> methodUsage = new HashMap<>();
-                    for (String method : Visitor.getDeclaredMethods()) {
-                        methodUsage.put(method, Visitor.getUsedMethods().contains(method));
-                    }
-                    classMethodUsage.put(className, methodUsage);
                     int radius = 20 + methods.size() + fields.size();
                     int x = (int) (radius + (Math.random()*(panelWidth - 15 * radius)));
                     int y = (int) (radius + (Math.random()*(panelHeight - 15 * radius)));
@@ -53,6 +47,9 @@ public class CodeParser{
                     double maxRadius = Math.min(panelWidth / 2, panelHeight / 2) - 10;
                     double distanceToSun = 100 + Math.random() * (maxRadius - 100);
                     Planet planet = new Planet(className, radius, distanceToSun, x, y, colors[0], colors[1], filePath, fields, methods);
+                    for(String usedMethod: usedMethods){
+                        planet.markMethodUsed(usedMethod);
+                    }
                     Officer.getPlanetStack().push(planet);
                 }
             } else {
@@ -74,9 +71,6 @@ public class CodeParser{
         } else {
             System.out.println(dirPath + " is not a directory.");
         }
-    }
-    public static Map<String, Boolean> getMethodUsage(String className){
-        return classMethodUsage.getOrDefault(className, new HashMap<>());
     }
 }
 

@@ -1,9 +1,7 @@
 package org.example;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /** @author Grant Robinson **/
 class Planet {
@@ -14,6 +12,7 @@ class Planet {
     private boolean selected;
     private final List<String> fields;
     private final Map<String, String> methods;
+    private Set<String> usedMethods;
     private final double distanceToSun, speed;
     private double angle;
     public Planet(String nameIn, int radiusIn, double distanceToSunIn, int xIn, int yIn, Color mainColorIn, Color secondaryColorIn, String filapath, List<String> fields, Map<String, String> methods) {
@@ -28,6 +27,7 @@ class Planet {
         filepath = filapath;
         this.fields = fields != null ? fields : new ArrayList<>();
         this.methods = methods != null ? methods : new HashMap<>();
+        this.usedMethods = new HashSet<>();
         angle = (Math.random()*(360));
         speed = Math.random() + .01;
     }
@@ -81,5 +81,11 @@ class Planet {
     }
     public Map<String, String> getMethods() {
         return methods;
+    }
+    public void markMethodUsed(String methodName){
+        usedMethods.add(methodName);
+    }
+    public boolean isMethodUsed(String methodName){
+        return usedMethods.contains(methodName);
     }
 }

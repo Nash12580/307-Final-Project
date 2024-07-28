@@ -23,7 +23,9 @@ public class ZoomPanel extends JPanel {
 
         for (Map.Entry<String, String> method : planet.getMethods().entrySet()) {
             double angle = (360.0 / numMethods) * i++;
-            meteorites.add(new Meteorite(getWidth() / 2, getHeight() / 2, METEORITE_SIZE, METEORITE_DISTANCE, angle, method.getKey(), method.getValue()));
+            boolean used = planet.isMethodUsed(method.getKey());
+            Color color = used ? Color.YELLOW: Color.DARK_GRAY;
+            meteorites.add(new Meteorite(getWidth() / 2, getHeight() / 2, METEORITE_SIZE, METEORITE_DISTANCE, angle, method.getKey(), method.getValue(), color));
         }
         JButton backButton =  new JButton("Back");
         backButton.addActionListener(e-> {
