@@ -1,10 +1,8 @@
 package org.example;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**@author Nashali Vicente Lopez**/
 
@@ -35,7 +33,6 @@ public class CodeMetrics {
             return loc;
         }
     }
-
     public static int counteLOC(String filePath) throws IOException{
         CompilationUnit cu = parseFile(filePath);
         if(cu == null) return 0;
@@ -43,7 +40,6 @@ public class CodeMetrics {
         visitor.visit(cu, null);
         return visitor.geteLOC();
     }
-
     public static int countlLOC(String filePath) throws IOException{
         CompilationUnit cu = parseFile(filePath);
         if(cu == null) return 0;
@@ -51,29 +47,27 @@ public class CodeMetrics {
         visitor.visit(cu, null);
         return visitor.getLLOC();
     }
-
     private static  CompilationUnit parseFile(String filePath) throws IOException{
         try(FileInputStream in = new FileInputStream(filePath)){
             JavaParser parser = new JavaParser();
             return parser.parse(in).getResult().orElse(null);
         }
     }
-
-    private static List<String> listJavaFiles(String directoryPath){
-        List<String> javaFiles = new ArrayList<>();
-        File directory = new File(directoryPath);
-        if(directory.isDirectory()){
-            for(File file: directory.listFiles()){
-                if (file.isFile() && file.getName().endsWith(".java")){
-                    javaFiles.add(file.getAbsolutePath());
-                }else if(file.isDirectory()){
-                    javaFiles.addAll(listJavaFiles(file.getAbsolutePath()));
-                }
-            }
-        }
-        return javaFiles;
-    }
-    public static double calculateAbsractness(String filePath) throws IOException{
+//    private static List<String> listJavaFiles(String directoryPath){
+//        List<String> javaFiles = new ArrayList<>();
+//        File directory = new File(directoryPath);
+//        if(directory.isDirectory()){
+//            for(File file: directory.listFiles()){
+//                if (file.isFile() && file.getName().endsWith(".java")){
+//                    javaFiles.add(file.getAbsolutePath());
+//                }else if(file.isDirectory()){
+//                    javaFiles.addAll(listJavaFiles(file.getAbsolutePath()));
+//                }
+//            }
+//        }
+//        return javaFiles;
+//    }
+    public static double calculateAbstractness(String filePath) throws IOException{
         CompilationUnit cu = parseFile(filePath);
         if(cu == null) return 0.0;
         Visitor visitor = new Visitor();
@@ -83,6 +77,17 @@ public class CodeMetrics {
 
         if(totalCandI == 0) return 0.0;
         return (double) abstractCandI/totalCandI;
+    }
+    public static Map<String, Boolean> analyseMethods(String filepath) throws IOException{
+        CompilationUnit cu = parseFile(filepath);
+        if(cu == null) return Collections.emptyMap();
+        Visitor visitor = new Visitor();
+        visitor.visit(cu, null);
+        Map<String, Boolean> methodUsage = new HashMap<>();
+        for (String method : Visitor.getDeclaredMethods()) {
+            methodUsage.put(method, Visitor.getUsedMethods().contains(method));
+        }
+        return methodUsage;
     }
 }
 

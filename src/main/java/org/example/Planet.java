@@ -1,5 +1,4 @@
 package org.example;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,16 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 /** @author Grant Robinson **/
-
 class Planet {
-    private String name;
-    private int radius, x, y;
-    private Color mainColor, secondaryColor;
+    private final String name, filepath;
+    private final int radius;
+    private int x, y;
+    private final Color mainColor, secondaryColor;
     private boolean selected;
-    private String filepath;
-    private List<String> fields;
-    private Map<String, String> methods;
-    private double distanceToSun, angle, speed;
+    private final List<String> fields;
+    private final Map<String, String> methods;
+    private final double distanceToSun, speed;
+    private double angle;
     public Planet(String nameIn, int radiusIn, double distanceToSunIn, int xIn, int yIn, Color mainColorIn, Color secondaryColorIn, String filapath, List<String> fields, Map<String, String> methods) {
         name = nameIn;
         radius = radiusIn;

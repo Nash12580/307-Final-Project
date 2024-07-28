@@ -3,13 +3,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-/** @author Nashali Vicente Lopez **/
 /** @author Grant Robinson **/
+/** @author Nashali Vicente Lopez **/
 public class MouseNanny implements MouseListener, MouseMotionListener {
     private Planet selectedPlanet = null;
+    private List<Meteorite> meteorites = new ArrayList<>();
+    public MouseNanny() {}
+    public MouseNanny(List<Meteorite> meteorites) {
+        this.meteorites = meteorites;
+    }
+    public void setMeteorites(List<Meteorite> meteorites) {
+        this.meteorites = meteorites;
+    }
     private Planet getPlanetAt(int x, int y){
         Stack<Planet> planets = Officer.getPlanetStack();
         for(int i = planets.size() - 1; i >= 0; i--){
@@ -69,6 +78,20 @@ public class MouseNanny implements MouseListener, MouseMotionListener {
     public void mouseReleased(MouseEvent e) {}
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
-    public void mouseMoved(MouseEvent e) {}
+    public void mouseMoved(MouseEvent e) {
+        boolean found = false;
+        for(Meteorite meteorite: meteorites){
+            if(meteorite.isHovered(e.getX(), e.getY())){
+                meteorite.showHoverWindow(e.getXOnScreen(), e.getYOnScreen());
+                found = true;
+                break;
+            }
+        }
+        if(!found){
+            for(Meteorite meteorite: meteorites){
+                meteorite.hideHoverWindow();
+            }
+        }
+    }
     public void mouseDragged(MouseEvent e) {}
 }

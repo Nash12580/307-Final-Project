@@ -12,7 +12,6 @@ public class Officer {
     private static final Stack<Planet> planets = new Stack<>();
     private static int screenWidth;
     private static int screenHeight;
-
     public static void setUniversePanel(UniversePanel d) {
         universePanel = d;
     }
@@ -56,7 +55,7 @@ public class Officer {
         sb.append("LOC: ").append(CodeMetrics.countLOC(filepath)).append("\n");
         sb.append("eLOC: ").append(CodeMetrics.counteLOC(filepath)).append("\n");
         sb.append("lLOC: ").append(CodeMetrics.countlLOC(filepath)).append("\n");
-        sb.append("Abstractness: ").append(CodeMetrics.calculateAbsractness(filepath)).append("\n");
+        sb.append("Abstractness: ").append(CodeMetrics.calculateAbstractness(filepath)).append("\n");
         Planet planet = getPlanetByFilepath(filepath);
         if (planet != null) {
             sb.append("\n\nFields:\n");
@@ -89,5 +88,8 @@ public class Officer {
             }
         }
         return null;
+    }
+    public static Map<String, Boolean> getMethodUsage(String filepath) throws IOException{
+        return CodeMetrics.analyseMethods(filepath);
     }
 }

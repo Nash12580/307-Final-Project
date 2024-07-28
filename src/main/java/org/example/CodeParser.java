@@ -17,18 +17,20 @@ import java.util.Map;
 public class CodeParser{
     private static int panelWidth;
     private static int panelHeight;
-
+    private static final Map<String, Map<String, String>> classMethods = new HashMap<>();
+    private static final Map<String, Map<String, Boolean>> classMethodUsage = new HashMap<>();
     public static void initialize(int width, int height) {
         panelWidth = width;
         panelHeight = height;
     }
-
     public static void parseJavaFile(String filePath) throws IOException {
         try(FileInputStream in = new FileInputStream(filePath)) {
             JavaParser parser = new JavaParser();
             CompilationUnit cu = parser.parse(in).getResult().orElse(null);
 
             if (cu != null) {
+                Visitor visitor = new Visitor();
+                cu.accept(visitor, null);
                 for (ClassOrInterfaceDeclaration cls : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                     String className = cls.getNameAsString();
                     List<String> fields = cls.getFields().stream().map(f -> f.getVariables().toString()).toList();
@@ -38,7 +40,12 @@ public class CodeParser{
                         String params = method.getParameters().toString();
                         methods.put(methodName, params);
                     }
-
+                    classMethods.put(className, methods);
+                    Map<String, Boolean> methodUsage = new HashMap<>();
+                    for (String method : Visitor.getDeclaredMethods()) {
+                        methodUsage.put(method, Visitor.getUsedMethods().contains(method));
+                    }
+                    classMethodUsage.put(className, methodUsage);
                     int radius = 20 + methods.size() + fields.size();
                     int x = (int) (radius + (Math.random()*(panelWidth - 15 * radius)));
                     int y = (int) (radius + (Math.random()*(panelHeight - 15 * radius)));
@@ -55,19 +62,21 @@ public class CodeParser{
             e.printStackTrace();
         }
     }
-
     public static void parseJavaDirectory(String dirPath) throws IOException {
         File dir = new File(dirPath);
         if (dir.isDirectory()) {
             File[] files = dir.listFiles(file -> file.isFile() && file.getName().endsWith(".java"));
             if (files != null) {
-                for (File file: files) {
+                for (File file : files) {
                     parseJavaFile(file.getPath());
                 }
             }
         } else {
             System.out.println(dirPath + " is not a directory.");
         }
+    }
+    public static Map<String, Boolean> getMethodUsage(String className){
+        return classMethodUsage.getOrDefault(className, new HashMap<>());
     }
 }
 
