@@ -1,8 +1,7 @@
 package org.example;
-
 import javax.swing.*;
 import java.awt.*;
-
+/** @author Nashali Vicente Lopez**/
 public class Meteorite {
     private int x, y, size;
     private Color color;
@@ -56,8 +55,5 @@ public class Meteorite {
     }
     public void hideHoverWindow(){
         hoverWindow.setVisible(false);
-    }
-    public String getMethodParams() {
-        return methodParams;
     }
 }

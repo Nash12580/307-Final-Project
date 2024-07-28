@@ -1,8 +1,6 @@
 package org.example;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Point2D;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +25,7 @@ public class ZoomPanel extends JPanel {
             Color color = used ? Color.YELLOW: Color.DARK_GRAY;
             meteorites.add(new Meteorite(getWidth() / 2, getHeight() / 2, METEORITE_SIZE, METEORITE_DISTANCE, angle, method.getKey(), method.getValue(), color));
         }
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton backButton =  new JButton("Back");
         backButton.addActionListener(e-> {
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(ZoomPanel.this);
@@ -39,9 +38,11 @@ public class ZoomPanel extends JPanel {
             frame.revalidate();
             frame.repaint();
         });
-        add(backButton, BorderLayout.SOUTH);
+        buttonPanel.add(backButton);
+        add(buttonPanel, BorderLayout.SOUTH);
         addMouseMotionListener(new MouseNanny());
         addMouseMotionListener(new MouseNanny(meteorites));
+        new Timer(30, e -> repaint()).start();
     }
     @Override
     protected void paintComponent(Graphics g){

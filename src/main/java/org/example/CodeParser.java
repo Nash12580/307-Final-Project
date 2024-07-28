@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.*;
 import java.io.FileInputStream;
 import java.util.List;
-
 /**@author Nashali Vicente Lopez**/
 public class CodeParser{
     private static int panelWidth;
@@ -26,8 +25,8 @@ public class CodeParser{
             if (cu != null) {
                 Visitor visitor = new Visitor();
                 cu.accept(visitor, null);
-                Set<String> declaredMethods = visitor.getDeclaredMethods();
-                Set<String> usedMethods = visitor.getUsedMethods();
+                Set<String> declaredMethods = Visitor.getDeclaredMethods();
+                Set<String> usedMethods = Visitor.getUsedMethods();
                 Set<String> unusedMethods = new HashSet<>(declaredMethods);
                 unusedMethods.removeAll(usedMethods);
 

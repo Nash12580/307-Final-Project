@@ -1,5 +1,4 @@
 package org.example;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import org.jfree.chart.ChartFactory;
@@ -7,11 +6,9 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.chart.ui.ApplicationFrame;
-
-
 import javax.swing.*;
 import java.awt.*;
+/** @author Veer Bhagia **/
 
 public class GitHubVisualizer extends JFrame {
     public GitHubVisualizer(String title, DefaultCategoryDataset dataset) {

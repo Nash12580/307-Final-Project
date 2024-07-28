@@ -5,7 +5,6 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 /** @author Grant Robinson **/
 /** @author Nashali Vicente Lopez **/
@@ -14,9 +13,6 @@ public class MouseNanny implements MouseListener, MouseMotionListener {
     private List<Meteorite> meteorites = new ArrayList<>();
     public MouseNanny() {}
     public MouseNanny(List<Meteorite> meteorites) {
-        this.meteorites = meteorites;
-    }
-    public void setMeteorites(List<Meteorite> meteorites) {
         this.meteorites = meteorites;
     }
     private Planet getPlanetAt(int x, int y){

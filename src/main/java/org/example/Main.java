@@ -1,23 +1,41 @@
 package org.example;
-
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 /** @author Grant Robinson **/
+/** @author Nashali Vicente **/
+/** @author Veer Bhagia **/
 
 public class Main extends JFrame {
 
     public static void main(String[] args) throws IOException {
-        String testFilepath = "C:\\Users\\Nasha\\JavaProjects\\CSC 307\\PaintApp";
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Officer.setScreenWidth(screenSize.width);
         Officer.setScreenHeight(screenSize.height);
         CodeParser.initialize(screenSize.width, screenSize.height);
-        CodeParser.parseJavaDirectory(testFilepath);
+        while (true) {
+            String path = JOptionPane.showInputDialog(null, "Enter the file or directory path:", "Input Path", JOptionPane.PLAIN_MESSAGE);
 
+            if (path == null) {
+                JOptionPane.showMessageDialog(null, "Path cannot be empty.", "Empty Path", JOptionPane.ERROR_MESSAGE);
+            } else {
+                path = path.trim();
+                File file = new File(path);
+                if (file.isDirectory()) {
+                    CodeParser.parseJavaDirectory(path);
+                    break;
+                } else if (file.isFile()) {
+                    CodeParser.parseJavaFile(path);
+                    break;
+                } else {
+                    JOptionPane.showMessageDialog(null, "Invalid path. Please enter a valid file or directory path.", "Invalid Path", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
         Main universe = new Main();
         universe.setSize(screenSize.width, screenSize.height);
         universe.setTitle("Universe");

@@ -35,19 +35,9 @@ public class Officer {
     public static void setScreenWidth(int width) {
         screenWidth = width;
     }
-
-    public static int getScreenWidth() {
-        return screenWidth;
-    }
-
     public static void setScreenHeight(int height) {
         screenHeight = height;
     }
-
-    public static int getScreenHeight() {
-        return screenHeight;
-    }
-
     public static String getMetrics(String filepath) throws IOException {
         StringBuilder sb = new StringBuilder();
         sb.append("File: ").append(filepath).append("\n");
@@ -88,8 +78,5 @@ public class Officer {
             }
         }
         return null;
-    }
-    public static Map<String, Boolean> getMethodUsage(String filepath) throws IOException{
-        return CodeMetrics.analyseMethods(filepath);
     }
 }
