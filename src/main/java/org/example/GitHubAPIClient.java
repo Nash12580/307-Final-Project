@@ -34,7 +34,6 @@ public class GitHubAPIClient {
         while ((line = reader.readLine()) != null) {
             stringBuilder.append(line);
         }
-
         client.close();
         return JsonParser.parseString(stringBuilder.toString()).getAsJsonArray();
     }

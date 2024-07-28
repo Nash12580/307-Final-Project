@@ -11,7 +11,6 @@ import java.util.TimerTask;
 /** @author Veer Bhagia **/
 
 public class Main extends JFrame {
-
     public static void main(String[] args) throws IOException {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Officer.setScreenWidth(screenSize.width);
@@ -42,7 +41,6 @@ public class Main extends JFrame {
         universe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         universe.setVisible(true);
     }
-
     public Main() {
         setJMenuBar(new FileMenu());
         UniversePanel universePanel = new UniversePanel();
