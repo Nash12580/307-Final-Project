@@ -7,7 +7,7 @@ import java.util.Map;
 /**@author Nashali Vicente Lopez**/
 public class ZoomPanel extends JPanel {
     private final Planet planet;
-    public static final int NUM_STARS = 10000, METEORITE_SIZE = 10;
+    public static final int NUM_STARS = 10000, METEORITE_SIZE = 25;
     private List<Star> stars;
     private final List<Meteorite> meteorites = new ArrayList<>();
     public static final double METEORITE_DISTANCE = 300, METEORITE_SPEED = 0.5;
@@ -42,7 +42,7 @@ public class ZoomPanel extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
         addMouseMotionListener(new MouseNanny());
         addMouseMotionListener(new MouseNanny(meteorites));
-        new Timer(30, e -> repaint()).start();
+        new Timer(60, e -> repaint()).start();
     }
     @Override
     protected void paintComponent(Graphics g){
